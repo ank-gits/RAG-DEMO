@@ -46,7 +46,7 @@ class RAG:
         
         uuids = [str(i) for i in range(len(self.doc_chunks))]
         self.vectorstore.add_documents(documents=self.doc_chunks, ids=uuids)
-        rag.init_retriever_and_pipeline()
+        self.init_retriever_and_pipeline()
     
     def init_retriever_and_pipeline(self):
         self.retriever = self.vectorstore.as_retriever(k=4)
