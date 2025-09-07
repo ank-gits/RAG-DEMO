@@ -1,3 +1,12 @@
+# Required pip packages:
+# langchain
+# langchain-community
+# langchain-chroma
+# langchain-ollama
+# langchain-core
+# ollama
+# pandas
+
 import re
 from os import path
 from glob import glob  
@@ -30,7 +39,7 @@ class RAG:
 
     def read_pdfs(self,pdf_list:list=None):
 
-        if len(pdf_list)==0 or pdf_list is None:
+        if pdf_list is None or len(pdf_list)==0:
             pdf_list = glob(path.join(self.pdf_dir, "*.pdf"))
         for pdf in pdf_list:
             loader = PyPDFLoader(pdf)
@@ -64,6 +73,7 @@ class RAG:
     def answer_query(self, question):
         documents = self.retriever.invoke(question)
         doc_texts = "\n".join([doc.page_content for doc in documents])
+        # print(doc_texts)
         answer = self.rag_chain.invoke({"question": question, "documents": doc_texts})
         return answer
 

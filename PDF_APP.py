@@ -4,7 +4,7 @@ from rag_app import RAG
 
 # Directory to save uploaded PDFs
 UPLOAD_DIR = "uploaded_pdfs"
-VECTOR_DBB_COLLECTION_NAME = "Earnings_Call_Transcripts"
+VECTOR_DBB_COLLECTION_NAME = "Earnings_Call_Transcripts_2"
 
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -19,6 +19,8 @@ if uploaded_files:
             f.write(uploaded_file.getbuffer())
         st.success(f"Saved {uploaded_file.name} to {UPLOAD_DIR}")
 
+
+
 # Import RAG system from RAG.py
 # Initialize RAG system with uploaded PDFs
 rag = RAG(vector_collection_name=VECTOR_DBB_COLLECTION_NAME)
@@ -26,12 +28,18 @@ rag = RAG(vector_collection_name=VECTOR_DBB_COLLECTION_NAME)
 existing_pdfs = set(os.listdir(UPLOAD_DIR))
 new_pdfs = set(f.name for f in uploaded_files) if uploaded_files else set()
 pdfs_to_process = list(new_pdfs - existing_pdfs)
+print('here')
+print(existing_pdfs)
 print(pdfs_to_process)
 
 if pdfs_to_process:
     # Add only new PDFs to the vector database
     rag.read_pdfs(pdfs_to_process)
     rag.add_to_vector_db()
+else:
+    rag.read_pdfs()
+    rag.add_to_vector_db()
+
 
 
 # UI layout: two columns
